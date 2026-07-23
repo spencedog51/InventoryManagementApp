@@ -1,24 +1,15 @@
 #ifndef ITEMCARD_H
 #define ITEMCARD_H
 
-#include <QWidget>
-#include <Qlabel>
+#include <QLabel>
+#include <QMouseEvent>
 
-class ItemCard : public QWidget
+class ItemCard : public QFrame
 {
     Q_OBJECT
 
 
 protected:
-    explicit ItemCard(
-        const QPixmap& image,
-        const QString& name,
-        const QString& type,
-        double weight,
-        const QString& sku,
-        double price,
-        QWidget* parent = nullptr);
-
     //Picture of product/material
     QPixmap image;
 
@@ -40,7 +31,20 @@ protected:
     //price (sell price for products, buy price for materials)
     double price;
 
+    explicit ItemCard(
+        const QPixmap& image,
+        const QString& name,
+        const QString& type,
+        double weight,
+        const QString& sku,
+        double price,
+        QFrame* parent = nullptr);
+
+    void mousePressEvent(QMouseEvent *event) override;
+
+
 signals:
+    void clicked(ItemCard* card);
 };
 
 class ProductCard : public ItemCard
@@ -56,7 +60,7 @@ public:
         double price = 0,
         const QString& collection = "",
         const QList<std::pair<QString, int>>& materialsUsed = {},
-        QWidget* parent = nullptr);
+        QFrame* parent = nullptr);
 
     //item collection (none if material)
     QString itemCollection;
@@ -81,7 +85,7 @@ public:
         const QString& webLink = "",
         const QString& webSku = "",
         double quantity = 0,
-        QWidget* parent = nullptr);
+        QFrame* parent = nullptr);
 
     //website purchased from
     QString websiteLink;

@@ -9,8 +9,8 @@ ItemCard::ItemCard(
     double weight,
     const QString& sku,
     double price,
-    QWidget* parent)
-    : QWidget(parent),
+    QFrame* parent)
+    : QFrame(parent),
     image(image),
     name(name),
     type(type),
@@ -18,8 +18,24 @@ ItemCard::ItemCard(
     personalSku(sku),
     price(price)
 {
+    setObjectName("ItemCard");
     QVBoxLayout* layout = new QVBoxLayout(this);
 
+    setFixedSize(250, 300);
+    setStyleSheet(
+        "#ItemCard {"
+        "border: 2px solid gray;"
+        "border-radius: 10px;"
+        "background-color: white;"
+        "}"
+        "#ItemCard QLabel {"
+        "color: black;"
+        "background: transparent;"
+        "}"
+    );
+
+    setFrameShape(QFrame::StyledPanel);
+    setFrameShadow(QFrame::Raised);
     nameLabel = new QLabel(this);
     layout->addWidget(nameLabel);
 }
@@ -33,7 +49,7 @@ ProductCard::ProductCard(
     double price,
     const QString& collection,
     const QList<std::pair<QString, int>>& materialsUsed,
-    QWidget* parent)
+    QFrame* parent)
     : ItemCard(image, name, type, weight, sku, price, parent),
     itemCollection(collection),
     materialsUsed(materialsUsed)
@@ -51,11 +67,18 @@ MaterialCard::MaterialCard(
     const QString& webLink,
     const QString& webSku,
     double quantity,
-    QWidget* parent)
+    QFrame* parent)
     : ItemCard(image, name, type, weight, sku, price, parent),
     websiteLink(webLink),
     websiteSku(webSku),
     quantity(quantity)
 {
     nameLabel->setText(name);
+}
+
+void ItemCard::mousePressEvent(QMouseEvent *event)
+{
+    emit clicked(this);
+
+    QFrame::mousePressEvent(event);
 }
