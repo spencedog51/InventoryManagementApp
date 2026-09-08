@@ -1,6 +1,7 @@
 #include "productpage.h"
 #include "itemcard.h"
 
+#include <QDialog>
 #include <QGridLayout>
 #include <QScrollArea>
 #include <QVBoxLayout>
@@ -66,23 +67,28 @@ void ProductPage::PopulateProductGrid()
 void ProductPage::AddNewProduct(ProductCard* newProduct)
 {
     productCards.append(newProduct);
-    PopulateProductGrid();
 
     connect(newProduct,
             &ItemCard::clicked,
             this,
-            &ProductPage::openCard);
+            &ProductPage::openProduct);
+
+    PopulateProductGrid();
+
 }
 
-void ProductPage::openCard(ItemCard* card)
+void ProductPage::openProduct(ItemCard* product)
 {
-    qDebug() << "Clicked card: " << card;
-    // QDialog dialog(this);
+    qDebug() << "Clicked card: " << product->name;
+    QDialog *dialog = new QDialog(this);
+    dialog->setWindowTitle("test title");
+    dialog->resize(1200, 800);
 
-    // QVBoxLayout layout(&dialog);
+    QVBoxLayout *layout = new QVBoxLayout(dialog);
 
-    // QLabel label("Product details");
-    // layout.addWidget(&label);
+    QLabel *productName = new QLabel(product->name);
 
-    // dialog.exec();
+    layout->addWidget(productName);
+
+    dialog->exec();
 }

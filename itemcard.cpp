@@ -51,7 +51,7 @@ ProductCard::ProductCard(
     const QList<std::pair<QString, int>>& materialsUsed,
     QFrame* parent)
     : ItemCard(image, name, type, weight, sku, price, parent),
-    itemCollection(collection),
+    productCollection(collection),
     materialsUsed(materialsUsed)
 {
     nameLabel->setText(name);

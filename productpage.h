@@ -20,10 +20,12 @@ private:
 
     void AddNewProduct(ProductCard*);
 
+    void OpenExistingProduct(ProductCard*);
+
 signals:
 
 private slots:
-    void openCard(ItemCard* card);
+    void openProduct(ItemCard* product);
 };
 
 #endif // PRODUCTPAGE_H

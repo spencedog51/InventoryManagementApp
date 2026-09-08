@@ -8,8 +8,7 @@ class ItemCard : public QFrame
 {
     Q_OBJECT
 
-
-protected:
+public:
     //Picture of product/material
     QPixmap image;
 
@@ -42,6 +41,14 @@ protected:
 
     void mousePressEvent(QMouseEvent *event) override;
 
+    // /**
+    //  * @brief getItemCard - gets an item card and all its info
+    //  * @param isProduct - determines whether this is a product (true)
+    //  * or material (false).
+    //  * @param itemName - the name of the item to get (TODO: THIS MAY CHANGE TO SKU OR SOMETHING ELSE)
+    //  * @return - the entire item card
+    //  */
+    // ItemCard getItemCard(bool isProduct, QString itemName);
 
 signals:
     void clicked(ItemCard* card);
@@ -49,6 +56,12 @@ signals:
 
 class ProductCard : public ItemCard
 {
+    //product collection
+    QString productCollection;
+
+    //materials used to make (name and quantity)
+    QList<std::pair<QString, int>> materialsUsed;
+
     Q_OBJECT
 public:
     explicit ProductCard(
@@ -62,12 +75,6 @@ public:
         const QList<std::pair<QString, int>>& materialsUsed = {},
         QFrame* parent = nullptr);
 
-    //item collection (none if material)
-    QString itemCollection;
-
-    //materials used to make (name and quantity)
-    QList<std::pair<QString, int>> materialsUsed;
-
 signals:
 };
 
@@ -75,6 +82,15 @@ class MaterialCard : public ItemCard
 {
     Q_OBJECT
 public:
+    //website purchased from
+    QString websiteLink;
+
+    //website's sku
+    QString websiteSku;
+
+    //Quantity of material (individual)
+    double quantity;
+
     explicit MaterialCard(
         const QPixmap& image = QPixmap(),
         const QString& name = "",
@@ -86,15 +102,6 @@ public:
         const QString& webSku = "",
         double quantity = 0,
         QFrame* parent = nullptr);
-
-    //website purchased from
-    QString websiteLink;
-
-    //website's sku
-    QString websiteSku;
-
-    //Quantity of material (individual)
-    double quantity;
 
 signals:
 };
