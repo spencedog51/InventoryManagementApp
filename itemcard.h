@@ -35,7 +35,7 @@ public:
         const QString& name,
         const QString& type,
         double weight,
-        const QString& sku,
+        const QString& personalSku,
         double price,
         QFrame* parent = nullptr);
 
@@ -56,23 +56,28 @@ signals:
 
 class ProductCard : public ItemCard
 {
+    Q_OBJECT
+
+public:
     //product collection
     QString productCollection;
 
-    //materials used to make (name and quantity)
-    QList<std::pair<QString, int>> materialsUsed;
+    //amount of time to make product formatted to mm:ss
+    double timeToMake;
 
-    Q_OBJECT
-public:
+    //materials used to make (name and quantity)
+    QList<std::pair<QString, double>> materialsUsed;
+
     explicit ProductCard(
         const QPixmap& image = QPixmap(),
         const QString& name = "",
         const QString& type = "",
         double weight = 0,
-        const QString& sku = "",
+        const QString& personalSku = "",
         double price = 0,
-        const QString& collection = "",
-        const QList<std::pair<QString, int>>& materialsUsed = {},
+        const QString& productCollection = "",
+        double timeToMake = 0,
+        const QList<std::pair<QString, double>>& materialsUsed = {},
         QFrame* parent = nullptr);
 
 signals:
@@ -81,6 +86,7 @@ signals:
 class MaterialCard : public ItemCard
 {
     Q_OBJECT
+
 public:
     //website purchased from
     QString websiteLink;
@@ -96,7 +102,7 @@ public:
         const QString& name = "",
         const QString& type = "",
         double weight = 0,
-        const QString& sku = "",
+        const QString& personalSku = "",
         double price = 0,
         const QString& webLink = "",
         const QString& webSku = "",

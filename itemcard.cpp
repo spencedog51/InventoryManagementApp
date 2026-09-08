@@ -7,7 +7,7 @@ ItemCard::ItemCard(
     const QString& name,
     const QString& type,
     double weight,
-    const QString& sku,
+    const QString& personalSku,
     double price,
     QFrame* parent)
     : QFrame(parent),
@@ -15,7 +15,7 @@ ItemCard::ItemCard(
     name(name),
     type(type),
     weight(weight),
-    personalSku(sku),
+    personalSku(personalSku),
     price(price)
 {
     setObjectName("ItemCard");
@@ -45,13 +45,15 @@ ProductCard::ProductCard(
     const QString& name,
     const QString& type,
     double weight,
-    const QString& sku,
+    const QString& personalSku,
     double price,
-    const QString& collection,
-    const QList<std::pair<QString, int>>& materialsUsed,
+    const QString& productCollection,
+    double timeToMake,
+    const QList<std::pair<QString, double>>& materialsUsed,
     QFrame* parent)
-    : ItemCard(image, name, type, weight, sku, price, parent),
-    productCollection(collection),
+    : ItemCard(image, name, type, weight, personalSku, price, parent),
+    productCollection(productCollection),
+    timeToMake(timeToMake),
     materialsUsed(materialsUsed)
 {
     nameLabel->setText(name);
@@ -62,13 +64,13 @@ MaterialCard::MaterialCard(
     const QString& name,
     const QString& type,
     double weight,
-    const QString& sku,
+    const QString& personalSku,
     double price,
     const QString& webLink,
     const QString& webSku,
     double quantity,
     QFrame* parent)
-    : ItemCard(image, name, type, weight, sku, price, parent),
+    : ItemCard(image, name, type, weight, personalSku, price, parent),
     websiteLink(webLink),
     websiteSku(webSku),
     quantity(quantity)

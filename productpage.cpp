@@ -29,7 +29,8 @@ ProductPage::ProductPage(QWidget *parent)
 
     mainLayout->addWidget(productGridScrollArea);
 
-    ProductCard* prodCardTest1 = new ProductCard(QPixmap(), "product1");
+    ProductCard* prodCardTest1 = new ProductCard(QPixmap(), "Silver Star Stud Earrings", "earrings", 0.1, "SSS-E1", 0, "debut", 5,
+                                                {{"flat pad earring post", 1}, {"6 mm silver star bead", 1}, {"E6000 glue", 0.1}});
     ProductCard* prodCardTest2 = new ProductCard(QPixmap(), "product2");
     ProductCard* prodCardTest3 = new ProductCard(QPixmap(), "product3");
     ProductCard* prodCardTest4 = new ProductCard(QPixmap(), "product4");
@@ -79,6 +80,11 @@ void ProductPage::AddNewProduct(ProductCard* newProduct)
 
 void ProductPage::openProduct(ItemCard* product)
 {
+    ProductCard* productCard = dynamic_cast<ProductCard*>(product);
+    if (!productCard) {
+        qDebug() << product->name << "Is Not a ProductCard!";
+        return;
+    }
     qDebug() << "Clicked card: " << product->name;
     QDialog *dialog = new QDialog(this);
     dialog->setWindowTitle("test title");
@@ -86,9 +92,55 @@ void ProductPage::openProduct(ItemCard* product)
 
     QVBoxLayout *layout = new QVBoxLayout(dialog);
 
-    QLabel *productName = new QLabel(product->name);
+    // Image placeholder
+    QLabel *productImage = new QLabel(dialog);
+    productImage->setFixedSize(200, 200);
+    productImage->setAlignment(Qt::AlignCenter);
+    productImage->setStyleSheet("border: 1px gray; color: gray;");
 
+    if (productCard->image.isNull()) {
+        productImage->setText("No image yet");
+    } else {
+        productImage->setPixmap(productCard->image.scaled(
+            productImage->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    }
+
+    QLabel *productName = new QLabel(productCard->name);
+    QLabel *productType = new QLabel(productCard->type);
+    QLabel *productWeight = new QLabel(QString::number(productCard->weight) + " oz");
+    QLabel *productSku = new QLabel(productCard->personalSku);
+    QLabel *productPrice = new QLabel("$" + QString::number(productCard->price));
+    QLabel *productCollection = new QLabel(productCard->productCollection);
+
+    //Formatting time to mm:ss
+    int totalSeconds = qRound(productCard->timeToMake * 60);
+    int minutes = totalSeconds / 60;
+    int seconds = totalSeconds % 60;
+
+    QString formattedTime = QString("%1:%2")
+                            .arg(minutes, 2, 10, QChar('0'))
+                            .arg(seconds, 2, 10, QChar('0'));
+
+    QLabel *productTimeToMake = new QLabel(formattedTime);
+
+    //List of materials used
+    QStringList materialLines;
+    const auto &materials = productCard->materialsUsed;
+    for (const auto &[materialName, quantity] : materials) {
+        materialLines << materialName + ": " + QString::number(quantity);
+    }
+    QLabel *productMaterialsLabel = new QLabel("Materials Used:\n" + materialLines.join("\n"));
+
+
+    layout->addWidget(productImage);
     layout->addWidget(productName);
+    layout->addWidget(productType);
+    layout->addWidget(productWeight);
+    layout->addWidget(productSku);
+    layout->addWidget(productPrice);
+    layout->addWidget(productCollection);
+    layout->addWidget(productTimeToMake);
+    layout->addWidget(productMaterialsLabel);
 
     dialog->exec();
 }
